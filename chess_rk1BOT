@@ -1,0 +1,214 @@
+импорт случайных
+импорт re
+время от времени импортируйте perf_counter
+
+импорт шахмат
+импорт шахмат.движок
+
+def configure_weights(двигатель, плата):
+    веса = открыто('./weights.txt", "а")
+    weights_f = открыто('./weights_fen.txt", "а")
+
+    weights_f.write(str(board.fen()) + '\n')
+
+    while not board.is_game_over():
+        информация = движок.анализ(доска, шахматы.движок.Предел(глубина=10))
+        результат = движок.игра(доска, шахматы.движок.Предел(глубина=10))
+
+
+        score_real1 = re.sub('\D', ", str(информация['оценка']))
+        если int(score_real1) >=> 100 , а не доска.поверните:
+            веса.запись(str(результат.перемещение) + '\n')
+            результат_ = движок.игра(доска, шахматы.движок.Предел(глубина=20))
+
+            доска.толчок(результат_.ход)
+            весы_ф.запись(str(board.fen()) + '\n')
+
+
+            печать(board.unicode())
+            печать('\n'*2)
+
+        ещё:
+
+            информация = движок.анализ(доска, шахматы.движок.Предел(глубина=10))
+            результат = движок.игра(доска, шахматы.движок.Предел(глубина=10))
+
+            доска.толчок(результат.ход)
+            весы_ф.запись(str(board.fen()) + '\n')
+
+
+            печать(board.unicode())
+            печать('\n'*3)
+
+        если int(score_real1) <= -50 и доска.поверните:
+            веса.запись(str(результат.перемещение) + '\n')
+
+            результат_ = движок.игра(доска, шахматы.движок.Предел(глубина=20))
+
+            board.push(result_.move)
+            weights_f.write(str(board.fen()) + '\n')
+
+            print(board.unicode())
+            print('\n'*2)
+
+        else:
+
+            info = engine.analyse(board, chess.engine.Limit(depth=10))
+            result = engine.play(board, chess.engine.Limit(depth=10))
+
+            board.push(result.move)
+            weights_f.write(str(board.fen()) + '\n')
+
+            print(board.unicode())
+            print('\n'*3)
+
+            print('Weight configed!')
+
+
+def self_study_with_weights(engine, board,
+                            rating,
+                            results_f):
+    bb = 1
+    rating = 1000
+    depth = 10
+
+    # parse weights
+    weights_ = open('./weights.txt', 'r')
+    weights_ = weights_.readlines()
+    weights_f_ = open('./weights_fen.txt', 'r')
+    weights_f_ = weights_f_.readlines()
+    weights_f_ = [line.rstrip('\n') for line in weights_f_]
+
+
+    for weight in weights_:
+        new_weight = weight.replace('\n', '')
+        weights_.remove(weight) # removing old weight
+        weights_.append(new_weight)
+
+    # самостоятельное перемещение
+    если Это Правда:
+        информация = движок.анализ(доска, шахматы.движок.Предел(глубина=15))
+        результат = движок.игра(доска, шахматы.движок.Предел(глубина=15))
+
+
+        если результат.переместите  весы_и  \
+                весы__[bb-1] == \
+                str(доска.fen()):
+            печать("СТОП")
+
+            если Это Правда:
+                результат_ = движок.игра(доска, шахматы.движок.Предел(глубина=10))
+                если результат_.переместите  весы_:
+                    если глубина >=> 100:
+                        score_real1 = re.sub('\D', ", str(информация['оценка']))
+                        доска.толчок(результат_.ход)
+                        печать(board.unicode())
+                        если доска.поверните:
+                            печать(score_real1 + ' | БЕЛЫЙ ХОД')
+                        ещё:
+                            печать(score_real1 + ' | ЧЕРНЫЙ ХОД')
+                        #перерыв
+
+                    глубина += 5
+                    печать(глубина ТЕПЕРЬ РАВНА {глубине}')
+                    результат_ = движок.игра(доска, шахматы.движок.Предел(глубина=глубина))
+                    score_real1 = re.sub('\D', ", str(информация['оценка']))
+                    bb += 1
+                    если bb == 106:
+                        is_game_over = Верно
+                    print(board.unicode())
+                    if board.turn:
+                        print(score_real1 + ' | WHITE MOVE')
+                    else:
+                        print(score_real1 + ' | BLACK MOVE')
+
+                else:
+                    доска.толчок(результат_.ход)
+                    bb += 1
+                    печать(board.unicode())
+
+                    score_real1 = re.sub('\D', ", str(информация['оценка']))
+
+                    если доска.поверните:
+                        печать(score_real1 + ' | БЕЛЫЙ ХОД')
+                    ещё:
+                        печать(score_real1 + ' | ЧЕРНЫЙ ХОД')
+                    #перерыв
+
+        ещё:
+            информация = движок.анализ(доска, шахматы.движок.Предел(глубина=10))
+            результат = движок.игра(доска, шахматы.движок.Предел(глубина=10))
+
+            доска.толчок(результат.ход)
+            bb += 1
+            печать(board.unicode())
+            если доска.поверните:
+                score_real1 = re.sub('\D', ", str(информация['оценка']))
+                печать(score_real1 + ' | БЕЛЫЙ ХОД')
+            ещё:
+                score_real1 = re.sub('\D', ", str(информация['оценка']))
+                печать(score_real1 + ' | ЧЕРНЫЙ ХОД')
+
+        если str(board.результат()) == '1-0  ' или str(board.результат()) == '0-1':
+            рейтинг += случайный.рандрейндж(70, 120)
+            results_f.write(str(доска.результат()) + '\n')
+
+        elif str(доска.результат()) == '1/2-1/2  ' или bb == 106:
+            рейтинг += случайный.рандрейндж(10, 50)
+            results_f.write(str(board.result()) + '\n')
+
+        return rating-1000
+
+def bestmove(engine, board, wtime, btime, multipv, move, moveoverhead):
+
+    start_time = perf_counter()
+
+    MoveOverhead = float(f'0.{moveoverhead}')
+
+    info = engine.analyse(board, chess.engine.Limit(time=MoveOverhead))
+    result = engine.play(board, chess.engine.Limit(time=MoveOverhead))
+
+    информация['multipv'] = multipv
+
+    d = 0
+
+    весы_ = открыто('./weights.txt', 'р')
+    весы_ = весы_.строки чтения()
+
+    для веса в весах_:
+        new_weight = вес.заменить('\n', ")
+        весы_.удалить(вес) # удаление старого веса
+        весы_.добавить(новый вес)
+
+    если результат.переместите  весы_:
+        d += 5
+        информация = движок.анализ(доска, шахматы.движок.Ограничение(время=перемещение))
+        результат = движок.игра(доска, шахматы.движок.Ограничение(время=перемещение))
+
+        информация['multipv'] = multipv
+
+        конец = perf_counter()
+
+        если переместить == 'W':
+            wtime -= (время окончания - начала)
+
+            возврат [результат.перемещение, wtime]
+
+        элиф ход == 'B':
+            btime -= (время окончания - начала)
+
+            возврат [результат.перемещение, btime]
+
+    ещё:
+
+        конец = perf_counter()
+
+        если переместить == 'W':
+            wtime -= (время окончания - начала)
+
+            возврат [результат.перемещение, wtime]
+
+        элиф ход == 'B':
+            btime -= (время окончания - 
+
+            возврат [результат.перемещение, btime]
